@@ -8,3 +8,15 @@ services:
       - 9101:8000
     volumes:
       - .:/app
+  db:
+    image: mysql:5.7.37
+    restart: always
+    environment:
+      MYSQL_DATABASE: admin
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - 9306:3306
+
