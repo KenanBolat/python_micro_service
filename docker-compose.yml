@@ -8,6 +8,8 @@ services:
       - 9101:8000
     volumes:
       - .:/app
+    depends_on:
+      - db
   db:
     image: mysql:5.7.37
     restart: always
