@@ -1,7 +1,10 @@
+from rest_framework.views import APIView
 from .models import Products
+from .models import User
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+import random
 
 from .serializers import ProductSerializer
 
@@ -25,7 +28,23 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        pass
+        product = Products.objects.get(id=pk)
+        serializer = ProductSerializer(instance=product, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None):
-        pass
+        product = Products.objects.get(id=pk)
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserAPIView(APIView):
+    def get(self, _):
+        users = User.objects.all()
+        user = random.choice(users)
+        return Response({
+            'id': user.id,
+        })
+
